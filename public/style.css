@@ -25,31 +25,49 @@ html, body {
 #welcome {
   position: fixed;
   inset: 0;
-  background-color: #c9ffcf; /* mint zeleno jako v jamu */
   z-index: 99999;
   display: grid;
   place-items: center;
   text-align: center;
   cursor: pointer;
+  background: radial-gradient(circle at 30% 20%, #1b2a4a 0%, #0b1020 70%);
+  font-family: inherit;
 }
 
-#welcome h1 {
-  font-size: 42px;
-  margin: 8px 4px;
+.welcome-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 44px 60px;
+  color: #fff;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
 }
 
-#welcome p {
-  margin: 6px;
-  font-size: 16px;
+.welcome-logo {
+  font-size: 13px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #8ef7c1;
+  margin-bottom: 16px;
 }
 
-#welcome a {
-  color: blue; /* klasik */
+.welcome-card h1 {
+  font-size: 40px;
+  margin: 0 0 10px;
+}
+
+.welcome-sub {
+  font-size: 15px;
+  color: #cfd3e0;
+  margin: 0 0 28px;
 }
 
 .welcome-hint {
-  margin-top: 28px !important;
-  color: #555;
+  font-size: 13px;
+  color: #9aa3b8;
   animation: blink 1.2s infinite;
 }
 
