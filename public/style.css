@@ -430,7 +430,15 @@ html, body {
 
 .browser-frame { flex: 1; border: none; width: 100%; background: white; }
 
-/* ---------- taskbar ---------- */
+/* ---------- snake hra ---------- */
+.snake-app {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 10px; height: 100%; background: #0b0b14; box-sizing: border-box;
+}
+.snake-bar { color: #fff; font-size: 13px; font-family: inherit; }
+.snake-canvas { background: #0b0b14; border: 2px solid #333; border-radius: 8px; }
+.snake-hint { color: #9aa; font-size: 12px; text-align: center; }
+
 
 #taskbar {
   position: fixed;

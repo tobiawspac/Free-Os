@@ -117,6 +117,9 @@
       <div class="icon" data-app="browser" tabindex="0">
         <span>Browser</span>
       </div>
+      <div class="icon" data-app="snake" tabindex="0">
+        <span>Snake</span>
+      </div>
     </div>
   </div>
 
@@ -211,6 +214,14 @@
         <button class="browser-go">Go</button>
       </div>
       <iframe class="browser-frame" sandbox="allow-same-origin allow-scripts allow-forms allow-popups" src="https://wikipedia.org"></iframe>
+    </div>
+  </template>
+
+  <template id="tpl-snake">
+    <div class="snake-app">
+      <div class="snake-bar">Score: <span class="snake-score">0</span></div>
+      <canvas class="snake-canvas"></canvas>
+      <div class="snake-hint">Use arrows / WASD. Click to start.</div>
     </div>
   </template>
 

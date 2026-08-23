@@ -94,6 +94,8 @@ var apps = {
     factory: () => { const n = document.getElementById('tpl-console').content.cloneNode(true); initConsole(n); return n; } },
   browser: { title: 'Browser', width: 700, height: 500,
     factory: () => { const n = document.getElementById('tpl-browser').content.cloneNode(true); initBrowser(n); return n; } },
+  snake: { title: 'Snake', width: 360, height: 460,
+    factory: () => { const n = document.getElementById('tpl-snake').content.cloneNode(true); initSnake(n); return n; } },
 };
 
 // free plan = max 3 okna najednou
@@ -524,6 +526,91 @@ function initBrowser(root) {
   frame.addEventListener('load', function() {
     try { urlInput.value = frame.contentWindow.location.href; } catch (e) {}
   });
+}
+
+function initSnake(root) {
+  var canvas = root.querySelector('.snake-canvas');
+  var scoreEl = root.querySelector('.snake-score');
+  var hint = root.querySelector('.snake-hint');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var CELL = 16, COLS = 20, ROWS = 22;
+  canvas.width = COLS * CELL;
+  canvas.height = ROWS * CELL;
+  var snake, dir, nextDir, food, score, alive, timer;
+
+  function rand(n) { return Math.floor(Math.random() * n); }
+
+  function placeFood() {
+    do { food = { x: rand(COLS), y: rand(ROWS) }; }
+    while (snake.some(function(s) { return s.x === food.x && s.y === food.y; }));
+  }
+
+  function reset() {
+    snake = [{ x: 10, y: 11 }, { x: 9, y: 11 }, { x: 8, y: 11 }];
+    dir = { x: 1, y: 0 }; nextDir = { x: 1, y: 0 };
+    score = 0; alive = true;
+    scoreEl.textContent = '0';
+    hint.style.display = 'none';
+    placeFood();
+    draw();
+  }
+
+  function draw() {
+    ctx.fillStyle = '#0b0b14';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#ff5577';
+    ctx.fillRect(food.x * CELL + 2, food.y * CELL + 2, CELL - 4, CELL - 4);
+    snake.forEach(function(s, i) {
+      ctx.fillStyle = i === 0 ? '#8ef7c1' : '#4cc9f0';
+      ctx.fillRect(s.x * CELL + 1, s.y * CELL + 1, CELL - 2, CELL - 2);
+    });
+  }
+
+  function step() {
+    if (!alive) return;
+    dir = nextDir;
+    var head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    if (head.x < 0 || head.y < 0 || head.x >= COLS || head.y >= ROWS ||
+        snake.some(function(s) { return s.x === head.x && s.y === head.y; })) {
+      alive = false;
+      hint.textContent = 'Game over! Score ' + score + ' — click to restart';
+      hint.style.display = 'block';
+      return;
+    }
+    snake.unshift(head);
+    if (head.x === food.x && head.y === food.y) {
+      score++; scoreEl.textContent = score; placeFood();
+    } else {
+      snake.pop();
+    }
+    draw();
+  }
+
+  function setDir(nx, ny) {
+    if (dir.x === -nx && dir.y === -ny) return; // no reversing into self
+    nextDir = { x: nx, y: ny };
+  }
+
+  canvas.addEventListener('click', function() { if (!alive) reset(); });
+
+  // keyboard only controls this snake window when it is the active one
+  requestAnimationFrame(function() {
+    var win = canvas.closest('.window');
+    document.addEventListener('keydown', function(e) {
+      if (win && activeWindowId !== win.dataset.id) return;
+      var k = e.key;
+      if (k === 'ArrowUp' || k === 'w' || k === 'W') setDir(0, -1);
+      else if (k === 'ArrowDown' || k === 's' || k === 'S') setDir(0, 1);
+      else if (k === 'ArrowLeft' || k === 'a' || k === 'A') setDir(-1, 0);
+      else if (k === 'ArrowRight' || k === 'd' || k === 'D') setDir(1, 0);
+      else return;
+      e.preventDefault();
+    });
+  });
+
+  reset();
+  timer = setInterval(step, 130);
 }
 
 document.querySelectorAll('.icon').forEach(function(icon) {
