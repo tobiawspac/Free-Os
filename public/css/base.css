@@ -1,0 +1,94 @@
+/* freeos zakladni styly - plochy vzhled bez efektu */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;font-family:Helvetica,Arial,sans-serif;background:#111;color:#222}
+.hidden{display:none !important}
+button{font-family:inherit;cursor:pointer}
+
+/* uvodni obrazovka */
+#welcome{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;text-align:center;cursor:pointer;background:#15151f;color:#fff}
+.welcome-card{border:1px solid #333;padding:40px 60px}
+.welcome-logo{font-size:13px;letter-spacing:5px;text-transform:uppercase;margin-bottom:14px}
+.welcome-hint{font-size:11px;opacity:.6;margin-top:12px}
+
+/* status bar nahore */
+#status-bar{position:fixed;top:0;left:0;right:0;height:28px;background:#1b1b26;color:#ddd;display:flex;justify-content:space-between;align-items:center;padding:0 10px;z-index:5000;font-size:12px}
+.status-left,.status-right{display:flex;align-items:center;gap:10px}
+.power-led{width:8px;height:8px;background:#4cc9f0;display:inline-block}
+#os-logo-btn{background:none;border:none;color:#ddd;font-weight:bold}
+.sb-popover{position:fixed;top:32px;right:10px;width:220px;background:#22222e;border:1px solid #3a3a48;color:#ddd;padding:10px;z-index:6000}
+.sb-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.sb-slider{display:flex;align-items:center;gap:8px;padding-top:6px}
+.vol-label{font-size:11px}
+
+/* taskbar dole */
+#taskbar{position:fixed;bottom:0;left:0;right:0;height:44px;background:#1b1b26;border-top:1px solid #333;display:flex;justify-content:space-between;align-items:center;padding:0 8px;z-index:5000}
+.taskbar-start{display:flex;align-items:center;gap:6px;overflow:hidden}
+.start-btn{background:none;border:1px solid #444;color:#eee;width:30px;height:30px}
+#open-apps{display:flex;gap:4px}
+.taskbar-app{background:#2a2a38;color:#ccc;border:1px solid #444;padding:4px 10px;font-size:11px;max-width:140px}
+.taskbar-app.active{background:#3d3d52;color:#fff}
+.taskbar-app.minimized{opacity:.5}
+#clock{color:#aaa;font-size:12px}
+
+/* plocha */
+#desktop{position:absolute;inset:28px 0 44px 0;background:#20202c}
+.desktop-icons{display:flex;flex-direction:column;flex-wrap:wrap;gap:8px;padding:16px;height:calc(100% - 32px);align-items:flex-start;align-content:flex-start}
+.desktop-icons.freeform{display:block}
+.icon{width:76px;padding:10px 4px;text-align:center;background:#2a2a38;border:1px solid #3a3a48;color:#ddd;font-size:11px;cursor:pointer;user-select:none;position:relative}
+.icon.selected{border-color:#fff}
+.icon.dragging{opacity:.4}
+.icon-ghost{position:fixed;z-index:99998;pointer-events:none;opacity:.85}
+
+/* okna */
+.window{position:absolute;background:#26262f;border:1px solid #454555;color:#e5e5ea;display:flex;flex-direction:column;min-width:280px;min-height:180px}
+.window.active{border-color:#888}
+.window.minimized{display:none}
+.window.maximized{left:0 !important;top:0 !important;width:100% !important;height:calc(100%) !important}
+.window-titlebar{height:30px;background:#30303e;display:flex;justify-content:space-between;align-items:center;padding:0 8px;cursor:move;user-select:none;flex-shrink:0}
+.window-title{font-size:12px;font-weight:bold}
+.win-btn{background:none;border:none;color:#bbb;width:24px;height:24px}
+.win-btn:hover{color:#fff}
+.window-content{flex:1;overflow:auto;padding:10px}
+
+/* rohy na resizovani */
+.resize-handle{position:absolute;z-index:10}
+.resize-se{right:-3px;bottom:-3px;width:10px;height:10px;cursor:nwse-resize}
+.resize-sw{left:-3px;bottom:-3px;width:10px;height:10px;cursor:nesw-resize}
+.resize-ne{right:-3px;top:-3px;width:10px;height:10px;cursor:nesw-resize}
+.resize-nw{left:-3px;top:-3px;width:10px;height:10px;cursor:nwse-resize}
+.resize-e{right:-3px;top:10px;bottom:10px;width:6px;cursor:e-resize}
+.resize-w{left:-3px;top:10px;bottom:10px;width:6px;cursor:w-resize}
+.resize-s{bottom:-3px;left:10px;right:10px;height:6px;cursor:s-resize}
+.resize-n{top:-3px;left:10px;right:10px;height:6px;cursor:n-resize}
+
+/* snap preview pri tazeni k okraji */
+#snap-preview{position:fixed;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);z-index:4000}
+#selection-box{position:fixed;border:1px dashed #999;display:none;z-index:3999}
+
+/* menu + kontextova nabidka */
+.os-menu,#context-menu{position:fixed;background:#22222e;border:1px solid #3a3a48;z-index:7000;min-width:180px;padding:4px}
+.os-menu-item,.ctx-item{display:block;width:100%;text-align:left;background:none;border:none;color:#ddd;padding:7px 10px;font-size:12px}
+.os-menu-item:hover,.ctx-item:hover{background:#333344}
+.os-menu-sep,.ctx-sep{height:1px;background:#3a3a48;margin:4px 0}
+.mi-icon,.ci-icon{margin-right:6px}
+
+/* control center */
+#control-center{position:fixed;top:34px;right:10px;width:240px;background:#22222e;border:1px solid #3a3a48;padding:12px;z-index:6000}
+.cc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cc-toggle{background:#2e2e3c;border:1px solid #444;color:#ccc;padding:10px 6px;font-size:11px}
+.cc-toggle.active{background:#4a4a66;color:#fff}
+.cc-slider{display:flex;align-items:center;gap:8px;margin-top:12px}
+
+/* spotlight */
+#spotlight-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8000;display:grid;place-items:start center;padding-top:120px}
+#spotlight-box{width:420px;max-width:90vw;background:#26262f;border:1px solid #555;padding:10px}
+#spotlight-input{width:100%;padding:8px;background:#1b1b26;border:1px solid #444;color:#eee;font-size:14px}
+#spotlight-results{margin-top:6px}
+.spotlight-item{padding:7px 8px;color:#ddd;font-size:13px;cursor:pointer}
+.spotlight-item:hover{background:#333344}
+.spotlight-empty{padding:7px 8px;color:#777;font-size:12px}
+
+/* toast */
+.upgrade-toast{position:fixed;bottom:56px;left:50%;transform:translateX(-50%);background:#2e2e3c;color:#eee;border:1px solid #555;padding:9px 16px;font-size:12px;z-index:9000;opacity:0}
+.upgrade-toast.visible{opacity:1}
