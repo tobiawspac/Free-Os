@@ -29,8 +29,10 @@
 .spotlight-item{padding:6px 8px;cursor:pointer;border:1px solid transparent}
 .spotlight-item:hover{border-color:#999}
 #snap-preview{position:absolute;border:2px dashed #999;background:rgba(0,0,0,0.05);pointer-events:none;z-index:50}
-.desktop-icons{position:absolute;top:8px;left:8px;right:8px;bottom:8px}
-.icon{position:absolute;width:70px;text-align:center;cursor:pointer;padding:8px 4px}
+.desktop-icons{position:absolute;top:8px;left:8px;right:8px;bottom:8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));grid-template-rows:repeat(auto-fill,minmax(80px,1fr));gap:4px;align-content:start}
+.desktop-icons.freeform{display:flex;flex-wrap:wrap;gap:4px;align-content:start}
+.icon{width:80px;text-align:center;cursor:pointer;padding:8px 4px;border-radius:4px}
+.icon:hover{background:rgba(0,0,0,0.05)}
 .icon img{width:40px;height:40px;display:block;margin:0 auto 4px}
 .icon span{font-size:11px;word-break:break-word}
 .resize-handle{position:absolute;width:8px;height:8px}
