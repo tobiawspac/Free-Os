@@ -5,7 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeOs</title>
 </head>
-<body style="font-family: Comic Sans MS, cursive; background:#ffffff; color:#111111;">
+<body style="font-family: Comic Sans MS, cursive; background:#ffffff; color:#111111; margin:0; overflow:hidden; height:100vh;">
+
+<style>
+/* minimalni funkcni CSS - zadny design, jen aby OS fungoval */
+*{margin:0;padding:0;box-sizing:border-box}
+.hidden{display:none!important}
+.minimized{display:none!important}
+#status-bar{position:fixed;top:0;left:0;right:0;height:28px;display:flex;justify-content:space-between;align-items:center;padding:0 8px;z-index:9999;border-bottom:1px solid #ccc;background:#fff}
+#desktop{position:absolute;top:28px;left:0;right:0;bottom:28px;overflow:hidden}
+.window{position:absolute;border:1px solid #999;min-width:200px;min-height:120px;display:flex;flex-direction:column;background:#fff}
+.window-titlebar{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;cursor:move;background:#e0e0e0;border-bottom:1px solid #999;user-select:none;flex-shrink:0}
+.window-controls{display:flex;gap:4px}
+.win-btn{width:20px;height:20px;border:1px solid #999;background:#fff;cursor:pointer;font-size:12px;line-height:20px;text-align:center;padding:0}
+.window-content{flex:1;overflow:auto;padding:8px}
+#taskbar{position:fixed;bottom:0;left:0;right:0;height:28px;display:flex;align-items:center;padding:0 8px;gap:4px;z-index:9999;border-top:1px solid #ccc;background:#fff}
+.taskbar-app{padding:2px 8px;border:1px solid #999;background:#fff;cursor:pointer;font-size:11px}
+.context-menu{position:absolute;z-index:10000}
+#os-menu{position:fixed;top:28px;left:0;z-index:10000;border:1px solid #999;background:#fff;padding:4px 0}
+#control-center{position:fixed;top:28px;right:0;z-index:10000;border:1px solid #999;background:#fff;padding:8px;width:200px}
+.sb-popover{position:absolute;z-index:10000;border:1px solid #999;background:#fff;padding:8px;width:180px}
+#spotlight-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.9);z-index:99999;display:flex;justify-content:center;padding-top:20vh}
+#spotlight-box{width:400px;border:1px solid #999;background:#fff;padding:8px}
+#spotlight-input{width:100%;padding:8px;border:1px solid #999;font-size:16px}
+#spotlight-results{margin-top:4px}
+.spotlight-item{padding:6px 8px;cursor:pointer;border:1px solid transparent}
+.spotlight-item:hover{border-color:#999}
+#snap-preview{position:absolute;border:2px dashed #999;background:rgba(0,0,0,0.05);pointer-events:none;z-index:50}
+.desktop-icons{position:absolute;top:8px;left:8px;right:8px;bottom:8px}
+.icon{position:absolute;width:70px;text-align:center;cursor:pointer;padding:8px 4px}
+.icon img{width:40px;height:40px;display:block;margin:0 auto 4px}
+.icon span{font-size:11px;word-break:break-word}
+.resize-handle{position:absolute;width:8px;height:8px}
+.resize-se{right:0;bottom:0;cursor:se-resize}
+.resize-sw{left:0;bottom:0;cursor:sw-resize}
+.resize-ne{right:0;top:0;cursor:ne-resize}
+.resize-nw{left:0;top:0;cursor:nw-resize}
+.resize-e{right:0;top:50%;transform:translateY(-50%);cursor:e-resize}
+.resize-w{left:0;top:50%;transform:translateY(-50%);cursor:w-resize}
+.resize-s{bottom:0;left:50%;transform:translateX(-50%);cursor:s-resize}
+.resize-n{top:0;left:50%;transform:translateX(-50%);cursor:n-resize}
+.chamfer{border-radius:4px}
+.chamfer-sm{border-radius:4px}
+</style>
 
   <!-- uvodni obrazovka -->
   <div id="welcome">
