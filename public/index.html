@@ -12,8 +12,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 .hidden{display:none!important}
 .minimized{display:none!important}
-#status-bar{position:fixed;top:0;left:0;right:0;height:28px;display:flex;justify-content:space-between;align-items:center;padding:0 8px;z-index:9999;border-bottom:1px solid #ccc;background:#fff}
-#desktop{position:absolute;top:28px;left:0;right:0;bottom:28px;overflow:hidden}
+#desktop{position:absolute;top:0;left:0;right:0;bottom:28px;overflow:hidden}
 .window{position:absolute;border:1px solid #999;min-width:200px;min-height:120px;display:flex;flex-direction:column;background:#fff}
 .window-titlebar{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;cursor:move;background:#e0e0e0;border-bottom:1px solid #999;user-select:none;flex-shrink:0}
 .window-controls{display:flex;gap:4px}
@@ -22,8 +21,6 @@
 #taskbar{position:fixed;bottom:0;left:0;right:0;height:28px;display:flex;align-items:center;padding:0 8px;gap:4px;z-index:9999;border-top:1px solid #ccc;background:#fff}
 .taskbar-app{padding:2px 8px;border:1px solid #999;background:#fff;cursor:pointer;font-size:11px}
 .context-menu{position:absolute;z-index:10000}
-#os-menu{position:fixed;top:28px;left:0;z-index:10000;border:1px solid #999;background:#fff;padding:4px 0}
-#control-center{position:fixed;top:28px;right:0;z-index:10000;border:1px solid #999;background:#fff;padding:8px;width:200px}
 .sb-popover{position:absolute;z-index:10000;border:1px solid #999;background:#fff;padding:8px;width:180px}
 #spotlight-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.9);z-index:99999;display:flex;justify-content:center;padding-top:20vh}
 #spotlight-box{width:400px;border:1px solid #999;background:#fff;padding:8px}
@@ -72,38 +69,12 @@
     </div>
   </div>
 
-  <div id="status-bar">
-    <div class="status-left">
-      <span class="power-led" aria-hidden="true"></span>
-      <button id="os-logo-btn" type="button">FreeOs</button>
-      <span id="date-display">--</span>
-    </div>
-    <div class="status-right">
-      <span id="sb-clock">--:--:--</span>
-      <button id="cc-btn" aria-label="Control Center">⋮</button>
-    </div>
-  </div>
-
-  <div id="os-menu" class="hidden chamfer-sm">
-    <button class="os-menu-item" data-action="about"><span class="mi-icon">i</span> About FreeOs</button>
-      <button class="os-menu-item" data-action="settings">Settings</button>
-    <div class="os-menu-sep"></div>
-    <button class="os-menu-item" data-action="reset"><span class="mi-icon">↻</span> Reset to Default</button>
-  </div>
-
   <div id="context-menu" class="hidden chamfer-sm">
     <button class="ctx-item" data-action="refresh"><span class="ci-icon">↻</span> Refresh</button>
     <button class="ctx-item" data-action="arrange"><span class="ci-icon">▦</span> Arrange Icons</button>
     <button class="ctx-item" data-action="wallpaper"><span class="ci-icon">▨</span> Change Wallpaper</button>
     <div class="ctx-sep"></div>
     <button class="ctx-item" data-action="about"><span class="ci-icon">i</span> About FreeOs</button>
-  </div>
-
-  <div id="control-center" class="hidden chamfer-sm">
-    <div class="cc-grid">
-      <button class="cc-toggle" id="cc-glass">Glass Effect</button>
-      <button class="cc-toggle" id="cc-anim">Animations</button>
-    </div>
   </div>
 
   <div id="spotlight-overlay" class="hidden">
