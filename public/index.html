@@ -47,6 +47,19 @@
 .resize-n{top:0;left:50%;transform:translateX(-50%);cursor:n-resize}
 .chamfer{border-radius:4px}
 .chamfer-sm{border-radius:4px}
+.paint-app{display:flex;flex-direction:column;height:100%}
+.paint-toolbar{display:flex;gap:4px;padding:4px;border-bottom:1px solid #ccc;flex-shrink:0}
+.paint-color{width:20px;height:20px;border:1px solid #999;cursor:pointer;padding:0}
+.paint-clear{padding:2px 8px;border:1px solid #999;background:#fff;cursor:pointer;font-size:11px}
+.paint-canvas{flex:1;cursor:crosshair;border:1px solid #eee}
+.clock-app{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px}
+.clock-canvas{border:1px solid #999}
+.clock-digital{font-family:monospace;font-size:18px}
+.files-app{display:flex;flex-direction:column;height:100%}
+.files-toolbar{display:flex;align-items:center;gap:8px;padding:4px 8px;border-bottom:1px solid #ccc;flex-shrink:0}
+.files-up{border:1px solid #999;background:#fff;cursor:pointer;padding:2px 8px;font-size:11px}
+.files-path{font-family:monospace;font-size:12px}
+.files-list{flex:1;overflow:auto}
 </style>
 
   <!-- uvodni obrazovka -->
@@ -66,8 +79,6 @@
       <span id="date-display">--</span>
     </div>
     <div class="status-right">
-      <span id="sb-wifi">WiFi</span>
-      <span id="sb-battery">Batt</span>
       <span id="sb-clock">--:--:--</span>
       <button id="cc-btn" aria-label="Control Center">⋮</button>
     </div>
@@ -80,28 +91,6 @@
     <button class="os-menu-item" data-action="reset"><span class="mi-icon">↻</span> Reset to Default</button>
   </div>
 
-  <div id="sb-wifi-popover" class="sb-popover hidden chamfer-sm">
-    <h4>Wi-Fi</h4>
-    <div class="sb-row"><span>Status</span><span id="wifi-status">Connected</span></div>
-    <div class="sb-row"><span>Network</span><span id="wifi-ssid">FreeOs-5G</span></div>
-    <div class="sb-row"><span>Signal</span><span id="wifi-signal">Excellent</span></div>
-  </div>
-
-  <div id="sb-battery-popover" class="sb-popover hidden chamfer-sm">
-    <h4>Battery</h4>
-    <div class="sb-row"><span>Level</span><span id="batt-level">--</span></div>
-    <div class="sb-row"><span>Charging</span><span id="batt-charging">--</span></div>
-    <div class="sb-row"><span>Time left</span><span id="batt-time">--</span></div>
-  </div>
-
-  <div id="sb-clock-popover" class="sb-popover hidden chamfer-sm">
-    <h4>Volume</h4>
-    <div class="sb-slider">
-      <span class="vol-label">Vol</span>
-      <input type="range" id="sb-volume" min="0" max="100" value="80">
-    </div>
-  </div>
-
   <div id="context-menu" class="hidden chamfer-sm">
     <button class="ctx-item" data-action="refresh"><span class="ci-icon">↻</span> Refresh</button>
     <button class="ctx-item" data-action="arrange"><span class="ci-icon">▦</span> Arrange Icons</button>
@@ -112,14 +101,8 @@
 
   <div id="control-center" class="hidden chamfer-sm">
     <div class="cc-grid">
-      <button class="cc-toggle" id="cc-wifi">Wi-Fi</button>
-      <button class="cc-toggle" id="cc-dnd">Do Not Disturb</button>
       <button class="cc-toggle" id="cc-glass">Glass Effect</button>
       <button class="cc-toggle" id="cc-anim">Animations</button>
-    </div>
-    <div class="cc-slider">
-      <span class="vol-label">Vol</span>
-      <input type="range" id="cc-volume" min="0" max="100" value="80">
     </div>
   </div>
 
@@ -153,6 +136,15 @@
       </div>
       <div class="icon" data-app="snake" tabindex="0">
         <span>Snake</span>
+      </div>
+      <div class="icon" data-app="paint" tabindex="0">
+        <span>Paint</span>
+      </div>
+      <div class="icon" data-app="clock" tabindex="0">
+        <span>Clock</span>
+      </div>
+      <div class="icon" data-app="files" tabindex="0">
+        <span>Files</span>
       </div>
     </div>
   </div>
@@ -256,6 +248,38 @@
       <div class="snake-bar">Score: <span class="snake-score">0</span></div>
       <canvas class="snake-canvas"></canvas>
       <div class="snake-hint">Use arrows / WASD. Click to start.</div>
+    </div>
+  </template>
+
+  <template id="tpl-paint">
+    <div class="paint-app">
+      <div class="paint-toolbar">
+        <button class="paint-color" data-color="#000000" style="background:#000"></button>
+        <button class="paint-color" data-color="#ff0000" style="background:#ff0000"></button>
+        <button class="paint-color" data-color="#0000ff" style="background:#0000ff"></button>
+        <button class="paint-color" data-color="#00aa00" style="background:#00aa00"></button>
+        <button class="paint-color" data-color="#ff6600" style="background:#ff6600"></button>
+        <button class="paint-color" data-color="#ffffff" style="background:#ffffff;border:1px solid #999">X</button>
+        <button class="paint-clear">Clear</button>
+      </div>
+      <canvas class="paint-canvas" width="460" height="280"></canvas>
+    </div>
+  </template>
+
+  <template id="tpl-clock">
+    <div class="clock-app">
+      <canvas class="clock-canvas" width="200" height="200"></canvas>
+      <div class="clock-digital"></div>
+    </div>
+  </template>
+
+  <template id="tpl-files">
+    <div class="files-app">
+      <div class="files-toolbar">
+        <button class="files-up" disabled>↑ Up</button>
+        <span class="files-path">/</span>
+      </div>
+      <div class="files-list"></div>
     </div>
   </template>
 

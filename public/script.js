@@ -112,6 +112,12 @@ var apps = {
     factory: () => { const n = document.getElementById('tpl-browser').content.cloneNode(true); initBrowser(n); return n; } },
   snake: { title: 'Snake', width: 360, height: 460,
     factory: () => { const n = document.getElementById('tpl-snake').content.cloneNode(true); initSnake(n); return n; } },
+  paint: { title: 'Paint', width: 500, height: 360,
+    factory: () => { const n = document.getElementById('tpl-paint').content.cloneNode(true); initPaint(n); return n; } },
+  clock: { title: 'Clock', width: 240, height: 300,
+    factory: () => { const n = document.getElementById('tpl-clock').content.cloneNode(true); initClock(n); return n; } },
+  files: { title: 'Files', width: 400, height: 350,
+    factory: () => { const n = document.getElementById('tpl-files').content.cloneNode(true); initFiles(n); return n; } },
 };
 
 // free plan = max 3 okna najednou
@@ -821,6 +827,160 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
+
+// initNotepad - chybel
+function initNotepad(root) {
+  var area = root.querySelector('textarea');
+  var saved = loadState('notepad', '');
+  if (saved) area.value = saved;
+  area.addEventListener('input', function() { saveState('notepad', area.value); });
+}
+
+// initPaint
+function initPaint(root) {
+  var canvas = root.querySelector('.paint-canvas');
+  var ctx = canvas.getContext('2d');
+  var color = '#000000';
+  var drawing = false;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  root.querySelectorAll('.paint-color').forEach(function(btn) {
+    btn.addEventListener('click', function() { color = btn.dataset.color; });
+  });
+
+  root.querySelector('.paint-clear').addEventListener('click', function() {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  });
+
+  canvas.addEventListener('mousedown', function(e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+  });
+  canvas.addEventListener('mousemove', function(e) {
+    if (!drawing) return;
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+  canvas.addEventListener('mouseup', function() { drawing = false; });
+  canvas.addEventListener('mouseleave', function() { drawing = false; });
+}
+
+// initClock
+function initClock(root) {
+  var canvas = root.querySelector('.clock-canvas');
+  var ctx = canvas.getContext('2d');
+  var digital = root.querySelector('.clock-digital');
+  var size = 200, cx = size / 2, cy = size / 2, r = 85;
+
+  function drawClock() {
+    var now = new Date();
+    ctx.clearRect(0, 0, size, size);
+    // cifernik
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // cisla 1-12
+    ctx.fillStyle = '#000';
+    ctx.font = '12px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (var i = 1; i <= 12; i++) {
+      var a = (i * 30 - 90) * Math.PI / 180;
+      ctx.fillText('' + i, cx + Math.cos(a) * (r - 15), cy + Math.sin(a) * (r - 15));
+    }
+    // hodinova
+    var h = now.getHours() % 12;
+    var m = now.getMinutes();
+    var s = now.getSeconds();
+    var ha = ((h + m / 60) * 30 - 90) * Math.PI / 180;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(ha) * 45, cy + Math.sin(ha) * 45);
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    // minutova
+    var ma = ((m + s / 60) * 6 - 90) * Math.PI / 180;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(ma) * 65, cy + Math.sin(ma) * 65);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // vterinova
+    var sa = (s * 6 - 90) * Math.PI / 180;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(sa) * 75, cy + Math.sin(sa) * 75);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#ff0000';
+    ctx.stroke();
+    ctx.strokeStyle = '#000';
+    // stred
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    // digitalni
+    digital.textContent = now.toLocaleTimeString();
+  }
+  drawClock();
+  var timer = setInterval(drawClock, 1000);
+  root.closest('.window').addEventListener('click', function(e) {
+    if (e.target.closest('.close')) clearInterval(timer);
+  });
+}
+
+// initFiles
+function initFiles(root) {
+  var files = {
+    '/': ['Documents', 'Pictures', 'Music', 'readme.txt'],
+    '/Documents': ['notes.txt', 'todo.md', 'budget.csv'],
+    '/Pictures': ['sunset.jpg', 'selfie.png'],
+    '/Music': ['playlist.m3u', 'track01.mp3'],
+  };
+  var currentPath = '/';
+  var pathEl = root.querySelector('.files-path');
+  var listEl = root.querySelector('.files-list');
+  var upBtn = root.querySelector('.files-up');
+
+  function render() {
+    pathEl.textContent = currentPath;
+    upBtn.disabled = currentPath === '/';
+    listEl.innerHTML = '';
+    var items = files[currentPath] || [];
+    items.forEach(function(name) {
+      var row = document.createElement('div');
+      row.style.padding = '4px 8px';
+      row.style.cursor = 'pointer';
+      row.style.borderBottom = '1px solid #eee';
+      var isFolder = files['/' + name] !== undefined || name.indexOf('.') === -1;
+      row.textContent = (isFolder ? '📁 ' : '📄 ') + name;
+      row.addEventListener('click', function() {
+        if (isFolder) {
+          currentPath = (currentPath === '/' ? '' : currentPath) + '/' + name;
+          render();
+        } else {
+          alert('Opening: ' + name);
+        }
+      });
+      listEl.appendChild(row);
+    });
+  }
+
+  upBtn.addEventListener('click', function() {
+    var parts = currentPath.split('/').filter(Boolean);
+    parts.pop();
+    currentPath = parts.length ? '/' + parts.join('/') : '/';
+    render();
+  });
+  render();
+}
 
 function initSpotlight() {
   var appsList = Object.entries(apps).map(function(entry) { return { id: entry[0], title: entry[1].title }; });
